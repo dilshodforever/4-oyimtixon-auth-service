@@ -43,3 +43,12 @@ func (u *UserService) ChangePassword(ctx context.Context, req *pb.ChangePassword
 	}
 	return res, nil
 }
+
+func (u *UserService) UpdateXps(ctx context.Context, req *pb.UpdateXpRequest) (*pb.UpdateXpResponse, error) {
+	res, err := u.stg.User().UpdateXps(req)
+	if err != nil {
+		log.Print(err)
+		return nil, err
+	}
+	return res, nil
+}

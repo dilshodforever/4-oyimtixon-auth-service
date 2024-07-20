@@ -17,6 +17,11 @@ const docTemplate = `{
     "paths": {
         "/auth/forgot-password": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Request password reset",
                 "consumes": [
                     "application/json"
@@ -63,6 +68,11 @@ const docTemplate = `{
         },
         "/auth/login": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Login a user with username and password",
                 "consumes": [
                     "application/json"
@@ -101,48 +111,13 @@ const docTemplate = `{
                 }
             }
         },
-        "/auth/logout": {
-            "post": {
-                "description": "Logout a user with token",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Auth"
-                ],
-                "summary": "Logout a user",
-                "parameters": [
-                    {
-                        "description": "Logout user",
-                        "name": "Logout",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/auth.LogoutRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Logout successful",
-                        "schema": {
-                            "$ref": "#/definitions/auth.LogoutResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
         "/auth/register": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Register a new user with username, email, password, and full name",
                 "consumes": [
                     "application/json"
@@ -161,7 +136,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/auth.RegisterRequest"
+                            "$ref": "#/definitions/auth.Register"
                         }
                     }
                 ],
@@ -188,7 +163,12 @@ const docTemplate = `{
             }
         },
         "/auth/reset-password": {
-            "post": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Reset password with token and new password",
                 "consumes": [
                     "application/json"
@@ -207,7 +187,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/auth.ResetPasswordRequest"
+                            "$ref": "#/definitions/auth.ResetPassword"
                         }
                     }
                 ],
@@ -234,7 +214,7 @@ const docTemplate = `{
             }
         },
         "/user/change-password": {
-            "post": {
+            "put": {
                 "security": [
                     {
                         "BearerAuth": []
@@ -258,7 +238,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/user.ChangePasswordRequest"
+                            "$ref": "#/definitions/user.ChangePassword"
                         }
                     }
                 ],
@@ -296,15 +276,6 @@ const docTemplate = `{
                     "User"
                 ],
                 "summary": "Get user profile",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Bearer Token",
-                        "name": "token",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "Profile retrieved",
@@ -344,7 +315,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/user.UpdateProfileRequest"
+                            "$ref": "#/definitions/user.UpdateProfile"
                         }
                     }
                 ],
@@ -407,23 +378,7 @@ const docTemplate = `{
                 }
             }
         },
-        "auth.LogoutRequest": {
-            "type": "object",
-            "properties": {
-                "token": {
-                    "type": "string"
-                }
-            }
-        },
-        "auth.LogoutResponse": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string"
-                }
-            }
-        },
-        "auth.RegisterRequest": {
+        "auth.Register": {
             "type": "object",
             "properties": {
                 "email": {
@@ -433,12 +388,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "password": {
-                    "type": "string"
-                },
-                "role": {
-                    "type": "string"
-                },
-                "token": {
                     "type": "string"
                 },
                 "username": {
@@ -466,16 +415,13 @@ const docTemplate = `{
                 }
             }
         },
-        "auth.ResetPasswordRequest": {
+        "auth.ResetPassword": {
             "type": "object",
             "properties": {
                 "email_password": {
                     "type": "string"
                 },
                 "new_password": {
-                    "type": "string"
-                },
-                "token": {
                     "type": "string"
                 }
             }
@@ -488,16 +434,13 @@ const docTemplate = `{
                 }
             }
         },
-        "user.ChangePasswordRequest": {
+        "user.ChangePassword": {
             "type": "object",
             "properties": {
                 "current_password": {
                     "type": "string"
                 },
                 "new_password": {
-                    "type": "string"
-                },
-                "token": {
                     "type": "string"
                 }
             }
@@ -536,16 +479,13 @@ const docTemplate = `{
                 }
             }
         },
-        "user.UpdateProfileRequest": {
+        "user.UpdateProfile": {
             "type": "object",
             "properties": {
                 "avatar_url": {
                     "type": "string"
                 },
                 "full_name": {
-                    "type": "string"
-                },
-                "token": {
                     "type": "string"
                 }
             }

@@ -49,8 +49,8 @@ func (a *JwtRoleAuth) GetRole(r *gin.Context) (string, error) {
 		err    error
 	)
 
-	jwtToken := r.Request.Header.Get("Authourization")
-
+	jwtToken := r.Request.Header.Get("Authorization")
+									  
 	if jwtToken == "" {
 		return "unauthorized", nil
 	} else if strings.Contains(jwtToken, "Basic") {

@@ -8,22 +8,21 @@ service GameService {
   rpc GetLevels(GetLevelsRequest) returns (GetLevelsResponse);
   rpc StartLevel(StartLevelRequest) returns (StartLevelResponse);
   rpc CompleteLevel(CompleteLevelRequest) returns (CompleteLevelResponse);
-  
-  rpc GetChallenge(GetChallengeRequest) returns (Challenge);
+  rpc GetChallenge(GetChallengeRequest) returns (Level);
   rpc SubmitChallenge(SubmitChallengeRequest) returns (SubmitChallengeResponse);
-  
-  rpc GetSimulations(GetSimulationsRequest) returns (GetSimulationsResponse);
-  rpc GetSimulation(GetSimulationRequest) returns (Simulation);
-  rpc RunSimulation(RunSimulationRequest) returns (SimulationResult);
   
   rpc GetLeaderboard(GetLeaderboardRequest) returns (LeaderboardResponse);
   
   rpc GetAchievements(GetAchievementsRequest) returns (AchievementsResponse);
-  
-  rpc CreateQuantumCircuit(CreateQuantumCircuitRequest) returns (CreateQuantumCircuitResponse);
-  rpc GetQuantumCircuit(GetQuantumCircuitRequest) returns (Circuit);
-  rpc RunQuantumCircuit(RunQuantumCircuitRequest) returns (CircuitRunResponse);
+  rpc CheckLevels(Cheak) returns (CHeakResult);
+
 }
+
+
+message GetLevelResponse {
+  Level level = 1;
+}
+
 
 message GetLevelsRequest {
   string id = 1;
@@ -34,16 +33,17 @@ message GetLevelsResponse {
 }
 
 message Level {
-  string id = 1;
+  string levelid = 1;
   string name = 2;
   string description = 3;
   int32 required_xp = 4;
   bool completed = 5;
   repeated Challenge challenges = 6;
+  int32 cid=7;
 }
 
 message StartLevelRequest {
-  string token = 1;
+  string userid = 1;
   string level_id = 2;
 }
 
@@ -53,8 +53,9 @@ message StartLevelResponse {
 }
 
 message CompleteLevelRequest {
-  string token = 1;
+  string userid = 1;
   string level_id = 2;
+  int32 xpearned=3;
 }
 
 message CompleteLevelResponse {
@@ -67,16 +68,21 @@ message Challenge {
   string id = 1;
   string name = 2;
   string type = 3;
-  bool completed = 4;
+  string description = 4;
+  repeated Question questions=5;
 }
-
+message Question {
+  string id = 1;
+  string text = 2;
+  repeated string options = 3;
+  int32 correct_option=4;
+}
 message GetChallengeRequest {
-  string token = 1;
-  string challenge_id = 2;
+  string challenge_id = 1;
 }
 
 message SubmitChallengeRequest {
-  string token = 1;
+  string userid = 1;
   string challenge_id = 2;
   repeated Answer answers = 3;
 }
@@ -93,40 +99,13 @@ message Answer {
   int32 selected_option = 2;
 }
 
-message GetSimulationsRequest {
-  string token = 1;
-}
 
-message GetSimulationsResponse {
-  repeated Simulation simulations = 1;
-}
 
-message Simulation {
-  string id = 1;
-  string name = 2;
-  string description = 3;
-  string difficulty = 4;
-}
-
-message GetSimulationRequest {
-  string token = 1;
-  string simulation_id = 2;
-}
-
-message RunSimulationRequest {
-  string token = 1;
-  string simulation_id = 2;
-  SimulationParameters parameters = 3;
-}
 
 message SimulationParameters {
   map<string, string> parameters = 1;
 }
 
-message RunSimulationResponse {
-  SimulationResult simulation_result = 1;
-  int32 xp_earned = 2;
-}
 
 message SimulationResult {
   repeated float interference_pattern = 1;
@@ -164,17 +143,8 @@ message Achievement {
   string earned_at = 4;
 }
 
-message CreateQuantumCircuitRequest {
-  string token = 1;
-  string circuit_name = 2;
-  int32 qubits = 3;
-  repeated Gate gates = 4;
-}
 
-message CreateQuantumCircuitResponse {
-  string circuit_id = 1;
-  string message = 2;
-}
+
 
 message Gate {
   string type = 1;
@@ -182,26 +152,19 @@ message Gate {
   int32 control = 3;
 }
 
-message GetQuantumCircuitRequest {
-  string token = 1;
-  string circuit_id = 2;
+
+
+
+
+
+message Cheak{
+  string levelid =1;
+  int32 userxp=2;
 }
 
-message Circuit {
-  string id = 1;
-  string name = 2;
-  int32 qubits = 3;
-  repeated Gate gates = 4;
-  string created_at = 5;
+message CHeakResult{
+  string levelid=1;
+  bool result=2;
+  int32 xpearned=3;
 }
 
-message RunQuantumCircuitRequest {
-  string token = 1;
-  string circuit_id = 2;
-  int32 shots = 3;
-}
-
-message CircuitRunResponse {
-  map<string, int32> results = 1;
-  int32 xp_earned = 2;
-}

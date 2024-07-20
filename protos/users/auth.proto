@@ -22,6 +22,12 @@ message RegisterRequest {
   string role =5;
   string token =6;
 }
+message Register{
+  string username = 1;
+  string email = 2;
+  string password = 3;
+  string full_name = 4;
+}
 
 message RegisterResponse {
   string id = 1;
@@ -67,6 +73,10 @@ message ResetPasswordRequest {
   string new_password = 2;
   string email = 3;
   string username=4;
+}
+message ResetPassword {
+  string email_password = 1;
+  string new_password = 2;
 }
 
 message ResetPasswordResponse {

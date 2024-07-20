@@ -10,11 +10,11 @@ CREATE TABLE users (
     level INTEGER DEFAULT 1,
     xp INTEGER DEFAULT 0,
     created_at TIMESTAMP DEFAULT now(),
-    updated_at TIMESTAMP DEFAULT now(),
+    updated_at TIMESTAMP DEFAULT now()
 );
 
 
 CREATE TABLE refresh_tokens (
-    username,
-    token VARCHAR(500) UNIQUE NOT NULL,
+    username VARCHAR(50),
+    token VARCHAR(500) UNIQUE NOT NULL
 );

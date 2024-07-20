@@ -26,27 +26,13 @@ definitions:
       token:
         type: string
     type: object
-  auth.LogoutRequest:
-    properties:
-      token:
-        type: string
-    type: object
-  auth.LogoutResponse:
-    properties:
-      message:
-        type: string
-    type: object
-  auth.RegisterRequest:
+  auth.Register:
     properties:
       email:
         type: string
       full_name:
         type: string
       password:
-        type: string
-      role:
-        type: string
-      token:
         type: string
       username:
         type: string
@@ -64,13 +50,11 @@ definitions:
       username:
         type: string
     type: object
-  auth.ResetPasswordRequest:
+  auth.ResetPassword:
     properties:
       email_password:
         type: string
       new_password:
-        type: string
-      token:
         type: string
     type: object
   auth.ResetPasswordResponse:
@@ -78,13 +62,11 @@ definitions:
       message:
         type: string
     type: object
-  user.ChangePasswordRequest:
+  user.ChangePassword:
     properties:
       current_password:
         type: string
       new_password:
-        type: string
-      token:
         type: string
     type: object
   user.ChangePasswordResponse:
@@ -109,13 +91,11 @@ definitions:
       xp:
         type: integer
     type: object
-  user.UpdateProfileRequest:
+  user.UpdateProfile:
     properties:
       avatar_url:
         type: string
       full_name:
-        type: string
-      token:
         type: string
     type: object
   user.UpdateProfileResponse:
@@ -167,6 +147,8 @@ paths:
           description: Internal server error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Forgot password
       tags:
       - Auth
@@ -193,33 +175,9 @@ paths:
           description: Unauthorized
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Login a user
-      tags:
-      - Auth
-  /auth/logout:
-    post:
-      consumes:
-      - application/json
-      description: Logout a user with token
-      parameters:
-      - description: Logout user
-        in: body
-        name: Logout
-        required: true
-        schema:
-          $ref: '#/definitions/auth.LogoutRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Logout successful
-          schema:
-            $ref: '#/definitions/auth.LogoutResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            type: string
-      summary: Logout a user
       tags:
       - Auth
   /auth/register:
@@ -233,7 +191,7 @@ paths:
         name: Register
         required: true
         schema:
-          $ref: '#/definitions/auth.RegisterRequest'
+          $ref: '#/definitions/auth.Register'
       produces:
       - application/json
       responses:
@@ -249,11 +207,13 @@ paths:
           description: Internal server error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Register a new user
       tags:
       - Auth
   /auth/reset-password:
-    post:
+    put:
       consumes:
       - application/json
       description: Reset password with token and new password
@@ -263,7 +223,7 @@ paths:
         name: ResetPassword
         required: true
         schema:
-          $ref: '#/definitions/auth.ResetPasswordRequest'
+          $ref: '#/definitions/auth.ResetPassword'
       produces:
       - application/json
       responses:
@@ -279,11 +239,13 @@ paths:
           description: Internal server error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Reset password
       tags:
       - Auth
   /user/change-password:
-    post:
+    put:
       consumes:
       - application/json
       description: Change user password
@@ -293,7 +255,7 @@ paths:
         name: ChangePassword
         required: true
         schema:
-          $ref: '#/definitions/user.ChangePasswordRequest'
+          $ref: '#/definitions/user.ChangePassword'
       produces:
       - application/json
       responses:
@@ -315,12 +277,6 @@ paths:
       consumes:
       - application/json
       description: Retrieve user profile information
-      parameters:
-      - description: Bearer Token
-        in: query
-        name: token
-        required: true
-        type: string
       produces:
       - application/json
       responses:
@@ -347,7 +303,7 @@ paths:
         name: UpdateProfile
         required: true
         schema:
-          $ref: '#/definitions/user.UpdateProfileRequest'
+          $ref: '#/definitions/user.UpdateProfile'
       produces:
       - application/json
       responses:

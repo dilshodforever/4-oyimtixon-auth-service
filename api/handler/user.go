@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"github.com/dilshodforever/4-oyimtixon-auth-service/api/token"
 	pb "github.com/dilshodforever/4-oyimtixon-auth-service/genprotos/user"
 	"github.com/gin-gonic/gin"
 )
@@ -12,13 +13,17 @@ import (
 // @Accept json
 // @Produce json
 // @Security BearerAuth
-// @Param token query string true "Bearer Token"
 // @Success 200 {object} pb.GetProfileResponse "Profile retrieved"
 // @Failure 401 {string} string "Unauthorized"
 // @Router /user/profile [get]
 func (h *Handler) GetProfile(ctx *gin.Context) {
-	token := ctx.Query("token")
-	req := &pb.GetProfileRequest{Token: token}
+	jwtToken := ctx.Request.Header.Get("Authorization")
+	claims, err := token.ExtractClaim(jwtToken)
+	if err != nil {
+
+		panic(err)
+	}
+	req := &pb.GetProfileRequest{Username: claims["username"].(string)}
 	res, err := h.User.GetProfile(ctx, req)
 	if err != nil {
 		panic(err)
@@ -33,7 +38,7 @@ func (h *Handler) GetProfile(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Security BearerAuth
-// @Param UpdateProfile body pb.UpdateProfileRequest true "Update profile"
+// @Param UpdateProfile body pb.UpdateProfile true "Update profile"
 // @Success 200 {object} pb.UpdateProfileResponse "Profile updated"
 // @Failure 401 {string} string "Unauthorized"
 // @Router /user/profile [put]
@@ -43,6 +48,12 @@ func (h *Handler) UpdateProfile(ctx *gin.Context) {
 	if err != nil {
 		panic(err)
 	}
+	jwtToken := ctx.Request.Header.Get("Authorization")
+	claims, err := token.ExtractClaim(jwtToken)
+	if err != nil {
+		panic(err)
+	}
+	req.Username=claims["username"].(string)
 	res, err := h.User.UpdateProfile(ctx, req)
 	if err != nil {
 		panic(err)
@@ -57,16 +68,23 @@ func (h *Handler) UpdateProfile(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Security BearerAuth
-// @Param ChangePassword body pb.ChangePasswordRequest true "Change password"
+// @Param ChangePassword body pb.ChangePassword true "Change password"
 // @Success 200 {object} pb.ChangePasswordResponse "Password changed"
 // @Failure 401 {string} string "Unauthorized"
-// @Router /user/change-password [post]
+// @Router /user/change-password [put]
 func (h *Handler) ChangePassword(ctx *gin.Context) {
 	req := &pb.ChangePasswordRequest{}
 	err := ctx.BindJSON(&req)
 	if err != nil {
 		panic(err)
 	}
+	jwtToken := ctx.Request.Header.Get("Authorization")
+	claims, err := token.ExtractClaim(jwtToken)
+	if err != nil {
+
+		panic(err)
+	}
+	req.Username=claims["username"].(string)
 	res, err := h.User.ChangePassword(ctx, req)
 	if err != nil {
 		panic(err)

@@ -12,8 +12,9 @@ p, unauthorized, /auth/login, POST
 p, unauthorized, /auth/register, POST
 
 
-p, user, /user/update, PUT
-p, user, /user/delete, DELETE
-p, user, /user/admin/update, PUT
-p, user, /user/refreshTokenRequest, GET
+p, user, /auth/forgot-password, POST
+p, user, /auth/reset-password, PUT
+p, user, /user/profile, PUT
+p, user, /user/profile, GET
+p, user, /user/change-password, PUT
 

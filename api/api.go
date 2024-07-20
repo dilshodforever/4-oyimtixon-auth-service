@@ -43,16 +43,15 @@ func NewGin(h *handler.Handler) *gin.Engine {
 	{
 		a.POST("/register", h.Register)
 		a.POST("/login", h.Login)
-		a.POST("/logout", h.Logout)
-		a.POST("/forgot_password", h.ForgotPassword)
-		a.POST("/reset_password", h.ResetPassword)
+		a.POST("/forgot-password", h.ForgotPassword)
+		a.PUT("/reset-password", h.ResetPassword)
 	}
 
 	u := r.Group("/user")
 	{
 		u.GET("/profile", h.GetProfile)
 		u.PUT("/profile", h.UpdateProfile)
-		u.PUT("/password", h.ChangePassword)
+		u.PUT("/change-password", h.ChangePassword)
 	}
 
 	return r
